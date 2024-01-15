@@ -132,3 +132,134 @@ An internet gateway is a component in AWS VPC that allows communication between 
 
 - When you set up an internet gateway, you need to update the route table of your VPC to include a route that directs internet-bound traffic to the gateway.
 - For example, you might add a route specifying that traffic destined for any address outside your VPC (0.0.0.0/0 for IPv4 or ::/0 for IPv6) should be directed to the internet gateway.
+
+# EC2
+
+Allows users to rent virtual computers on which they can run their own computer applications. EC2 offers scalable computing capacity in the AWS cloud, reducing the need for upfront hardware investments and allowing for quicker development and deployment of applications.
+
+## Common mistakes
+
+- Ignoring security groups
+- Choosing the wrong instance type
+- Poor monitoring
+- Not optimizing costs
+- Neglecting backups
+
+## Why choose over lambda
+
+- Higher performance for certain workloads
+- More control over the underlying infrastructure
+- Cost control
+
+## Virtual machines
+
+EC2 instances are virtual machines (VMs) in the cloud. Unlike physical servers, virtual
+machines use software to create an abstraction from their underlying hardware.
+
+## Amazon Machine Image (AMI)
+
+An Amazon Machine Image (AMI) is a template that contains a software configuration (for example, an operating system, an application server, and applications). From an AMI, you launch an instance, which is a copy of the AMI running as a virtual server in the cloud. You can launch multiple instances of an AMI.
+
+## Instance types
+
+- General purpose
+- Compute optimized
+- Memory optimized
+- Storage optimized
+- Accelerated computing
+
+## Connecting to an instance
+
+Typically, you connect to an instance using SSH (Linux) or RDP (Windows). However, you can also connect to an instance using a serial console.
+
+## Lifecycle of an instance
+
+1. **Launch**: You launch an instance from an AMI.
+2. **Start**: You start the instance.
+3. **Stop**: You stop the instance.
+4. **Hibernate**: You hibernate the instance.
+5. **Reboot**: You reboot the instance.
+6. **Retire**: The instance is retired.
+7. **Terminate**: You terminate the instance.
+
+## Monitoring
+
+Use CloudWatch to monitor your EC2 instances. CloudWatch provides metrics such as CPU utilization, disk reads and writes, and network traffic. It's important to monitor your instances so that you can react to changes in performance or resource usage.
+
+# ECS
+
+Amazon ECS is a fully managed container orchestration service provided by AWS. It allows you to easily run, stop, and manage containers on a cluster. Your containers are defined in a task definition that you use to run individual tasks or services. ECS can be used with both EC2 and AWS Fargate, which is a serverless compute engine for containers.
+
+Fargate is a serverless compute engine for containers. It allows you to run containers without having to manage servers or clusters. You simply define your containerized applications and Fargate handles the rest. It's a good choice for running containers if you don't want to manage servers or if you want to run containers at scale.
+
+## Containers
+
+Containers are like lightweight, standalone packages that contain everything needed to run a piece of software. This includes the code, runtime, system tools, libraries, and settings. They are isolated from other containers and the host system, ensuring that they work uniformly regardless of where they're deployed.
+
+Think of a container as a shipping container for goods. Just as a shipping container can be loaded with different items (furniture, electronics, etc.) and then shipped anywhere in the world, knowing it will fit perfectly on any ship or truck, a software container can be packed with an application and its dependencies and moved across different computing environments, assured it will run the same way everywhere.
+
+## Task definitions
+
+Task definitions are blueprints for your applications in the context of Amazon ECS. They define how your containers should run, specifying things like which Docker images to use, how many resources (like CPU and memory) are needed, how the containers should communicate with each other, and what commands should be executed inside the containers.
+
+Consider a task definition as a recipe for a meal. Just like a recipe specifies ingredients, quantities, and the steps to prepare a dish, a task definition outlines the necessary components (like images and resources) and instructions for running your application containers.
+
+## Service
+
+In ECS, a service maintains and runs a specified number of instances of a task definition simultaneously. It ensures that the specified number of tasks are always running and replaces any tasks that fail or stop. This is crucial for applications that should be continuously available and scalable.
+
+Imagine a service as a bus service in a city. Just as a bus service ensures a certain number of buses are always on specific routes, regardless of whether a bus breaks down or completes its route, an ECS service ensures that a specified number of tasks are always running for your application.
+
+## Clusters
+
+Clusters are groups of EC2 instances that you use to run your containers with ECS. They represent the underlying infrastructure (like servers) on which your tasks and services are run. Clusters can contain multiple instances and can run multiple tasks across those instances.
+
+Think of a cluster as a housing estate. In this estate, each house (EC2 instance) can host several families (containers). The entire estate (cluster) is managed to ensure it accommodates all families comfortably, just like a cluster manages resources to run your containers efficiently.
+
+## Task
+
+In Amazon ECS, a task is an instance of a task definition. It is the actual running version of your application or a part of it. When you tell ECS to run a task, it launches the container specified in your task definition on an available EC2 instance within your cluster. A task can consist of one or multiple containers that are run together on the same host.
+
+Think of a task as a musician playing a concert. The task definition is like the sheet music that tells the musician what to play (it's the blueprint), and the task itself is the actual performance. Just as a musician follows the sheet music to perform a piece, a task uses the task definition to run your application. If you have multiple musicians (containers) playing together, they all follow the same sheet music (task definition) but perform their parts (run their specific containers) simultaneously. This concert is then hosted at a venue (an EC2 instance within a cluster), which provides the space and resources for the performance.
+
+## Task scheduling
+
+Task scheduling refers to the process of assigning tasks to container instances within a cluster.
+
+Lifecycle of a task:
+
+- Provisioning
+- Pending
+- Activating
+- Running
+- Deactivating
+- Stopping
+- Deprovisioning
+- Stopped
+
+# Lambda
+
+Lambda abstracts away the underlying infrastructure and allows you to run code without having to manage servers.
+
+However, it doesn't mean that there are no servers. It just means that you don't have to manage them. AWS manages the servers for you, so you can focus on writing code.
+
+## Cold Start
+
+A cold start occurs when a Lambda function is invoked for the first time or after it has been updated. When this happens, the Lambda service needs to allocate resources and set up the execution environment for the function. This can take some time, resulting in a delay before the function starts executing.
+
+## How to reduce cold starts
+
+- Keep functions warm: Regularly invoke your lambda function.
+- Use provisioned concurrency: Provisioned concurrency allows you to keep a specified number of functions initialized and ready to respond to requests.
+- Optimize package size: Reduce the size of your deployment package to reduce the time it takes to download and extract it.
+- Bootstrap as much code as possible outside of your handler: Move code that doesn't need to be executed on every invocation outside of your handler function.
+
+## Tips and tricks
+
+- Keep your functions stateless and idempotent.
+- Use cloudwatch alarms
+- Pick the right database solution
+- Use Layers to share dependencies
+- Focus on event driven architecture
+
+# Amazon RDS
