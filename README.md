@@ -67,3 +67,30 @@ An AMI is a template that contains a software configuration (operating system, a
 
 - **Pre-configured AMIs**: AWS provides pre-configured AMIs such as those with Amazon Linux, Windows Server, Ubuntu, etc.
 - **Custom AMIs**: You can also create your own AMI from an existing instance. This is useful for creating multiple instances that are configured the same way.
+
+# VPC
+
+A virtual network in the context of AWS (Amazon Web Services) and specifically AWS Virtual Private Cloud (VPC) is a logically isolated section of the AWS Cloud. It's virtual because it's not a physical network, but it's designed to provide the same features and functionality as a traditional network.
+
+## Characteristics of a Virtual Network in AWS VPC
+
+1. **Logical Isolation**: It's separated from other virtual networks in the AWS Cloud. This isolation ensures that resources within each VPC are secure and cannot be accessed by resources in other VPCs unless explicitly allowed.
+
+2. **Customizable IP Address Range**: You can select your own IP address range for the VPC, adhering to the IP protocol standards. This range is used to assign IP addresses to instances (virtual servers) within the VPC.
+
+3. **Subnets**: Within a VPC, you can create subnets, which are segments of the VPC’s IP address range where you can place groups of isolated resources. Subnets can be designated as public (accessible from the internet) or private (not accessible from the internet).
+
+4. **Control Over Routing**: You can create route tables to determine where network traffic from your subnets should be directed, such as to the internet, to other subnets, or to other VPCs.
+
+5. **Internet Connectivity**: Although VPCs are isolated from the internet by default, you can enable access to/from the internet by attaching an internet gateway and configuring routing rules.
+
+6. **Security Controls**: You can use security groups and network access control lists (ACLs) to control inbound and outbound traffic at the instance and subnet level, respectively.
+
+7. **Connection to On-Premises Networks**: You can connect a VPC to your own networks over the internet using VPN (Virtual Private Network) connections or through AWS Direct Connect for a more secure and consistent network experience.
+
+8. **AWS Resource Hosting**: Within a VPC, you can launch AWS resources such as Amazon EC2 instances (virtual servers), databases, and more.
+
+## Functionality
+
+- The virtual network functions like a traditional network in many ways but with the benefits of AWS’s scalable infrastructure.
+- It allows you to use AWS services in a network that you define and control, including the selection of IP address ranges, creation of subnets, and configuration of route tables and network gateways.
