@@ -263,3 +263,93 @@ A cold start occurs when a Lambda function is invoked for the first time or afte
 - Focus on event driven architecture
 
 # Amazon RDS
+
+Amazon Relational Database Service (RDS) is a managed service provided by AWS to set up, operate, and scale a relational database in the cloud. It simplifies database management for several popular database engines.
+
+1. **Managed Service**: Amazon RDS handles routine database tasks such as provisioning, patching, backup, recovery, failure detection, and repair.
+
+2. **Database Engines**: RDS supports several popular database engines, including Amazon Aurora, PostgreSQL, MySQL, MariaDB, Oracle Database, and SQL Server.
+
+3. **Scalability**: It allows you to scale your database's compute and storage resources with minimal downtime. This is ideal for applications with variable workloads.
+
+4. **Availability and Durability**: RDS facilitates high availability and durability through features like Multi-AZ deployments for failover and Read Replicas for improved read scaling.
+
+   - **Multi-AZ Deployments**: For high availability, RDS can automatically replicate the data in a primary database to a secondary database in a different Availability Zone (AZ).
+
+   - **Read Replicas**: They enhance performance by offloading read traffic from the primary database instance. This is especially useful for read-heavy database workloads.
+
+5. **Automated Backups**: RDS automatically backs up your database and transaction logs, enabling point-in-time recovery.
+
+6. **Security**: It offers encryption at rest and in transit. RDS also integrates with AWS Identity and Access Management (IAM) for access control.
+
+# DynamoDB
+
+Amazon DynamoDB is a fully managed NoSQL database service provided by AWS. It's a key-value and document database that delivers single-digit millisecond performance at any scale.
+
+## Key Concepts
+
+1. **Tables**: A table is a collection of data. It stores items, which are similar to rows in a relational database. Each item has a primary key, which uniquely identifies it in the table.
+2. **Attributes**: An attribute is a piece of data stored in an item. It's similar to a column in a relational database. Each attribute has a name and a value.
+3. **Item**: An item is a collection of attributes. It's similar to a row in a relational database.
+4. Simple Key: A simple key is a primary key that consists of one attribute.
+5. **Composite Key**: A composite key is a primary key that consists of two attributes. The two attributes are a partition key and a sort key.
+6. **Partition Key**: A partition key defines how data is distributed across partitions.
+7. **Sort Key**: A sort key is used to sort items with the same partition key.
+
+## DynamoDB JSON
+
+Each attribute in DynamoDB has an associated type. All types can be categorized into three categories: Scalar, Document, and Set.
+
+They are used for specifying the data type of an attribute when creating a table or adding an item to a table. DynamoDB is a schema-less NoSQL database, but it still enforces data types for each attribute in an item. These type designations ensure that the data stored in each attribute is of the expected type, which is crucial for operations like querying and data processing.
+
+- "S" stands for String.
+- "N" for Number.
+- "B" for Binary.
+- "L" for List.
+- "M" for Map.
+
+## Queries and Scans
+
+Scan operations examine every item in a table. They are less efficient than query operations because they process the entire table. However, they are useful for operations that don't require a specific item.
+
+Query operations are more efficient than scan operations because they only process items that match a given key condition expression. They are useful for operations that require a specific item.
+
+## Pricing
+
+DynamoDB charges you based on Read Capacity Units (RCU) and Write Capacity Units
+(WCU).
+
+## Backup
+
+It's built-in backup and restore feature allows you to create full backups of your tables for long-term retention and archival for regulatory compliance needs. It also enables point-in-time recovery (PITR) for your DynamoDB tables, helping you protect against accidental writes or deletes.
+
+## Streams
+
+## TTL
+
+You can enable TTL (Time to Live) on a table to automatically delete expired items. This is useful for removing old data from your tables.
+
+## Tips
+
+Think about your access patterns first- When designing your database, don't start
+by thinking about your keys and attributes first. Instead, start by thinking about your access patterns. For example, if you're building a project management tool, your access
+patterns could include:
+
+Getting users by user ID
+Getting users by project
+Getting projects by user Note down the access patterns and discuss them with
+
+Always prefer queries over scans - Always think about how you can leverage a query
+over a scan. Scans won't scale and are very expensive.
+
+Make use of global tables - Global tables allow you to create a single table that is
+replicated to multiple AWS regions. Use this feature right from the beginning.
+
+Activate point-in-time recovery - This will allow you to restore your database to
+points in the last 30 days.
+
+Monitor usage for your tables - Use common metrics in CloudWatch and build a
+dashboard for DynamoDB. There are automatic dashboards for DynamoDB already
+available. This will help you understand how your application behaves.
+
+# S3
