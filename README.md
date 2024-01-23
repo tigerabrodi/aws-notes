@@ -325,6 +325,22 @@ It's built-in backup and restore feature allows you to create full backups of yo
 
 ## Streams
 
+DynamoDB Streams is a feature in Amazon DynamoDB that captures changes (such as inserts, updates, and deletes) to items in a DynamoDB table in near real-time. Each record in the stream details a single data modification in the table.
+
+The purpose of DynamoDB Streams is to enable real-time processing of changes in your DynamoDB table. This feature allows you to:
+
+- Respond immediately to changes in your data.
+- Synchronize data changes with other databases or services.
+- Implement event-driven architectures.
+
+**When to Use**:
+
+1. **Real-Time Data Replication**: If you need to replicate data changes from a DynamoDB table to another data store.
+2. **Triggering Automated Actions**: For triggering AWS Lambda functions based on table changes. This is useful for various automated workflows like sending notifications, updating indexes, or real-time analytics.
+3. **Event-Driven Architectures**: If your application is built on an event-driven model where actions depend on certain data changes.
+4. **Maintaining Audit Trails**: To log and monitor changes in data for compliance or auditing purposes.
+5. **Aggregating or Filtering Data**: When you want to process data streams for summarizing, transforming, or filtering data as it changes.
+
 ## TTL
 
 You can enable TTL (Time to Live) on a table to automatically delete expired items. This is useful for removing old data from your tables.
@@ -353,3 +369,68 @@ dashboard for DynamoDB. There are automatic dashboards for DynamoDB already
 available. This will help you understand how your application behaves.
 
 # S3
+
+**What**: Amazon S3 (Simple Storage Service) is a scalable object storage service by AWS for storing and retrieving any amount of data.
+
+**Event Notifications**: Automatically sends messages or triggers functions in response to specific events in an S3 bucket, like object creation or deletion.
+
+**Lifecycle Policies**: Automatically manages objects by defining rules for transitioning objects to less expensive storage classes or deleting them after a set period.
+
+**Batch Operations**: Performs large-scale batch operations on S3 objects, like copying, tagging, or applying access controls, reducing manual effort for bulk actions.
+
+**Versioning**: Maintains multiple versions of an object within an S3 bucket, allowing you to retrieve and restore previous versions of an object.
+
+**Multi-Region Access Points**: Provides a way to manage data access across multiple geographic regions, optimizing for performance and resilience.
+
+**Pricing**: Based on storage used, number of requests, data transfer, and additional features like data transfer acceleration or lifecycle management. Pricing can vary by region and storage class.
+
+# SQS
+
+**What**: Amazon SQS (Simple Queue Service) is a fully managed message queuing service by AWS that enables the decoupling and scaling of microservices, distributed systems, and serverless applications.
+
+**Poll-Based**: Consumers poll SQS to retrieve and process messages, as opposed to push-based systems.
+
+**Event Source Mapping**: Allows automatic triggering of AWS Lambda functions in response to messages in an SQS queue.
+
+**Exactly Once vs At Least Once Delivery**:
+
+- **Exactly Once**: Each message is delivered only once (typically associated with FIFO queues).
+- **At Least Once**: Messages may be delivered more than once; consumers must handle duplicate messages (common in standard queues).
+
+**FIFO vs Standard Queues**:
+
+- **FIFO (First-In-First-Out)**:
+  - **Pros**: Guarantees the order of messages and exactly-once processing.
+  - **Cons**: Limited throughput (300 messages per second with batching, or 10 messages per second without).
+- **Standard Queues**:
+  - **Pros**: Higher throughput, unlimited number of transactions per second.
+  - **Cons**: Messages might be delivered in a different order and more than once.
+
+**DLQ (Dead Letter Queue)**: Used to collect messages that can’t be processed successfully, allowing separate handling of these messages.
+
+**Redriving from DLQ Back to SQS**: Involves manually or automatically moving messages from the DLQ back to the original queue for reprocessing.
+
+**Retention Period**: The time a message stays in the queue before being automatically deleted, ranging from 1 minute to 14 days.
+
+**Visibility Timeout**: The period during which SQS prevents other consumers from receiving and processing the message, ensuring that a message being processed isn’t received by another consumer.
+
+**Long Polling vs Short Polling**:
+
+- **Long Polling**: Waits for a message to become available if the queue is empty, reducing the number of empty responses and lowering costs.
+- **Short Polling**: Returns immediately, even if the queue is empty, which might lead to more frequent polling.
+
+**Three Common Message Lifecycles Within SQS**:
+
+1. **The Happy Path**: Message is successfully processed and deleted from the queue.
+2. **Consumer Failures**: Message isn't processed successfully and becomes visible again for reprocessing.
+3. **Too-Short Retention Periods**: Messages are automatically deleted if they aren’t processed within the retention period.
+
+**Server-Side Encryption**: Provides the ability to secure messages by encrypting them as they are stored in the queue.
+
+**Pricing**: Based on the number of requests (each 64KB chunk of payload is billed as one request). Also includes additional costs for optional features.
+
+**Using Partial Batch Responses**: Allows consumers to process and delete a subset of messages from a batch, reducing the likelihood of reprocessing the same message multiple times.
+
+**Good Use Cases**: Ideal for applications requiring decoupling of component processes, handling sporadic traffic, and ensuring the reliability and scalability of message processing.
+
+# SNS
