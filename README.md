@@ -434,3 +434,108 @@ available. This will help you understand how your application behaves.
 **Good Use Cases**: Ideal for applications requiring decoupling of component processes, handling sporadic traffic, and ensuring the reliability and scalability of message processing.
 
 # SNS
+
+**What**: Amazon SNS (Simple Notification Service) is a fully managed messaging service by AWS for both application-to-application (A2A) and application-to-person (A2P) communication.
+
+**Pub/Sub**: SNS follows a publish/subscribe model where messages are published to topics and immediately delivered to subscribers.
+
+**Difference from SQS**:
+
+- SQS is a message queue service used for decoupling components of a system.
+- SNS is a notification service designed for high-throughput, push-based messaging.
+
+**When to Use SNS over SQS and Vice Versa**:
+
+- **Use SNS** when you need to send the same message to multiple subscribers or for broadcasting notifications.
+- **Use SQS** for simple queuing, decoupling of processes, or if you need to process messages in a particular order.
+
+**Application to Application vs Application to Person**:
+
+- **A2A**: SNS facilitates communication between distributed software systems.
+- **A2P**: SNS can send messages to users via SMS, email, or mobile push notifications.
+
+**Fanout Pattern**: In SNS, this involves a single message being published to a topic and then delivered to multiple SQS queues, Lambda functions, or HTTP endpoints.
+
+**FIFO/Standard**:
+
+- SNS supports FIFO (First-In-First-Out) topics for messages that need strict order and deduplication.
+- Standard topics offer higher throughput with at-least-once delivery.
+
+**Deduplication IDs**: For FIFO topics, deduplication IDs prevent the same message from being delivered multiple times (useful in scenarios where multiple identical messages might be published).
+
+**Message Archive with Kinesis Firehose**: SNS can integrate with Kinesis Firehose to archive messages for compliance or analytical purposes.
+
+**Error Handling in SNS vs SQS**:
+
+- SNS doesn't have built-in awareness of consumer errors. If a Lambda function triggered by SNS fails, SNS won't retry.
+- To handle failures, implement error handling in the consumer (like Lambda) itself or use DLQs to capture failed messages.
+
+**Backoff Functions**: These are retry strategies that progressively increase the wait time between retries, useful in handling temporary failures in consumers.
+
+**Handling DLQ Messages from SNS**:
+
+- With SNS, the DLQ is for storing failed notification deliveries, not message processing failures.
+- Redriving messages isn’t straightforward as there's no source queue. You may need to manually replay messages on SNS or send them directly to the consumer.
+
+**Pricing**: SNS charges are based on the number of messages published, the number of notification deliveries, and optional features like SMS or mobile push notifications. Pricing can vary based on the region and the specific service used (SMS, HTTP, email, etc.).
+
+# EventBridge
+
+**What**: AWS EventBridge is a serverless event bus service that facilitates event-driven architecture by enabling software components to communicate with each other through events.
+
+**Problem It Solves**: EventBridge helps in connecting applications with data from a variety of sources and routes that data to targets for processing. It simplifies the architecture for event ingestion, delivery, security, authorization, and error handling.
+
+**Main Components**:
+
+1. **Event Bus**: The central hub where events are sent.
+2. **Event Rules**: Define the criteria for how incoming events are handled and routed.
+3. **Targets**: The destinations where events are sent for processing.
+
+**Event Bus in Depth**:
+
+- Acts as the receiver of events from AWS services, SaaS applications, and custom applications.
+- Supports different types of event buses like the default event bus for AWS services, partner event buses for SaaS, and custom event buses.
+
+**Event Rules in Depth**:
+
+- Rules match incoming events and route them to targets.
+- Can filter events based on specific attributes, patterns, or content.
+
+**Targets in Depth**:
+
+- AWS services like Lambda functions, SNS topics, SQS queues, or even another EventBridge event bus.
+- When a rule is met, the event is sent to the specified target(s) for processing.
+
+**Custom Event Bus**:
+
+- Allows you to create your own event bus for custom or third-party application events.
+- Useful for isolating and managing events specific to your application or organization.
+
+**Schedule Tasks with EventBridge Scheduler**:
+
+- Enables scheduling of automated tasks or workflows at specific times using cron or rate expressions.
+
+**Archive & Replay**:
+
+- Archive: Save events for a specified period for auditing or analysis.
+- Replay: Resend events from the archive to the event bus for reprocessing.
+
+**Handle Failures with DLQs**:
+
+- If an event fails to reach a target, it can be sent to a DLQ.
+- DLQs allow you to diagnose and understand the failure, and then reprocess the failed events.
+
+**Design for Failures**:
+
+- Anticipate and handle component failures in an event-driven architecture.
+- Implement retry policies, DLQs, and monitor events to ensure system resilience.
+
+**Subscription Pattern**:
+
+- Each consumer (service or application) subscribes to specific events via rules.
+- Ensures that consumers process only the events relevant to them, reducing unnecessary processing.
+
+**Schema Bindings**:
+
+- Define the structure of event data (objects and attributes).
+- Helps in validating the format of incoming events and assists in the development process by providing clear contracts for event data.
